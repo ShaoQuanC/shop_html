@@ -296,6 +296,16 @@
         athis.updateAttributeForm.author=row.author;
         console.log("属性修改"+JSON.stringify(row))//此时就能拿到整行的信息
       },
+      updateForm:function (rs) {
+        console.log("ssss"+rs);
+        var a =this;
+        this.$axios.post("http://192.168.1.237:8080/api/attribute/update",this.$qs.stringify(this.updateAttributeForm)).then(res=>{
+          this.updateFormFlag=false;
+          a.queryData(1);
+
+        }).catch(err=>console.log(err))
+
+      },
 
 
       handleCurrentChange:function(start){ //跳转页面

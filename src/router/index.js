@@ -33,6 +33,10 @@ export default new Router({
           path: '/Band',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Band.vue'),
           meta: { title: '品牌管理' }
+        },{
+          path: '/Attribute',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/shop/Attribute.vue'),
+          meta: { title: '属性管理' }
         },
         {
           path: '/form',

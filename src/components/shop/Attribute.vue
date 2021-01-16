@@ -2,6 +2,8 @@
   <div>
     <h3>属性信息</h3>
 
+    <el-button type="success" @click="addFormFlag=true">新增</el-button>
+
     <el-table
       :data="tableData"
       style="width: 100%"
@@ -70,6 +72,54 @@
 
     </el-table>
 
+    <!--  新增的弹框   -->
+    <el-dialog title="录入属性信息" :visible.sync="addFormFlag">
+
+      <el-form :model="addAttributeForm"  label-width="80px">
+
+        <el-form-item label="属性名称" prop="name">
+          <el-input v-model="addAttributeForm.name" autocomplete="off" ></el-input>
+        </el-form-item>
+
+
+        <el-form-item label="中文名称" prop="nameCH">
+          <el-input v-model="addAttributeForm.nameCH"></el-input>
+        </el-form-item>
+
+        <el-form-item label="分类" prop="typeId">
+          <el-input v-model="addAttributeForm.typeId"></el-input>
+        </el-form-item>
+
+        <el-form-item label="是否SKU" prop="isSKU">
+          <el-radio v-model="addAttributeForm.isSKU" label="0">否</el-radio>
+          <el-radio v-model="addAttributeForm.isSKU" label="1">是</el-radio>
+        </el-form-item>
+
+        <el-form-item label="是否删除" prop="isDel">
+          <el-radio v-model="addAttributeForm.isDel" label="0">不删除</el-radio>
+          <el-radio v-model="addAttributeForm.isDel" label="1">删除</el-radio>
+        </el-form-item>
+
+        <!--属性的类型    0 下拉框     1 单选框      2  复选框   3  输入框-->
+        <el-form-item label="属性的类型" prop="type">
+          <el-radio v-model="addAttributeForm.type" label="0">下拉框</el-radio>
+          <el-radio v-model="addAttributeForm.type" label="1">单选框</el-radio>
+          <el-radio v-model="addAttributeForm.type" label="2">复选框</el-radio>
+          <el-radio v-model="addAttributeForm.type" label="3">输入框</el-radio>
+        </el-form-item>
+
+        <el-form-item label="操作人" prop="author">
+          <el-input v-model="addAttributeForm.author"></el-input>
+        </el-form-item>
+
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormFlag = false">取 消</el-button>
+        <el-button type="primary" @click="addForm">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <div align="center">
       <el-pagination
         @current-change="handleCurrentChange"
@@ -95,6 +145,18 @@
         sizes:[2,3,5,10],
         size:2,
         start:1,
+
+        /*新增*/
+        addFormFlag:false,
+        addAttributeForm:{
+          name:"",
+          nameCH:"",
+          typeId:"",
+          type:[],
+          isSKU:"",
+          isDel:"0",
+          author:""
+        },
       }
     },methods:{
       queryData:function (page) {
@@ -106,7 +168,8 @@
 
         }).catch(function () {
         })
-      },typeShow:function (row,col,cell,index) {
+      },
+      typeShow:function (row,col,cell,index) {
         // 属性的类型    0 下拉框     1 单选框      2  复选框   3  输入框
         if(cell==0){
           return "下拉框";
@@ -141,6 +204,16 @@
           return "是";
         }
         return "";
+      },
+
+      addForm:function () {
+        var athis=this;
+        ajax.post("http://192.168.1.237:8080/api/attribute/add",this.$qs.stringify(this.addAttributeForm)).then(function () {
+          athis.addFormFlag = false;
+          athis.queryData(1);
+        }).catch(function () {
+
+        })
       },
 
 

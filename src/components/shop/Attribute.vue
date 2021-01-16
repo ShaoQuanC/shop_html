@@ -67,11 +67,11 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="100">
+        width="150">
         <template slot-scope="scope">
           <el-button type="warning" size="small"
                      @click="() => updateFormFlag=true">编辑</el-button>
-          <!--<el-button type="text" size="small" v-on:click="deleteCar(scope.row.cid)">删除</el-button>-->
+          <el-button type="danger" size="small" v-on:click="deleteFlag(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
 
@@ -306,6 +306,37 @@
         }).catch(err=>console.log(err))
 
       },
+      deleteFlag(id) {
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(rs => {
+        var a = this;
+        this.$axios.delete("http://192.168.1.237:8080/api/attribute/del?id="+id).then(res=>{
+          a.queryData();
+        }).catch(err=>console.log(err))
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+     /* deleteFlag:function (id) {
+        alert(id)
+        var a =this;
+        this.$axios.delete("http://192.168.1.237:8080/api/attribute/del?id="+id).then(res=>{
+          a.$message({
+            type: 'success',
+            message: '你的邮箱是: ' + value
+          });
+        }).catch()
+      },*/
 
 
       handleCurrentChange:function(start){ //跳转页面
@@ -319,8 +350,7 @@
 
     },created:function () {
       //请求数据
-      this.queryData(1,8);
-      //查询品牌数据
+      this.queryData(1);
     }
   }
 </script>

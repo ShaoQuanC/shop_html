@@ -301,7 +301,7 @@
         var a =this;
         this.$axios.post("http://192.168.1.237:8080/api/attribute/update",this.$qs.stringify(this.updateAttributeForm)).then(res=>{
           this.updateFormFlag=false;
-          a.queryData(1);
+          a.queryData(a.start);
 
         }).catch(err=>console.log(err))
 
@@ -314,7 +314,7 @@
       }).then(rs => {
         var a = this;
         this.$axios.delete("http://192.168.1.237:8080/api/attribute/del?id="+id).then(res=>{
-          a.queryData();
+          a.queryData(a.start);
         }).catch(err=>console.log(err))
         this.$message({
           type: 'success',
